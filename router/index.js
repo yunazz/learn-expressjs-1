@@ -7,7 +7,6 @@ const login = require("./login/login");
 const member = require("./member/member");
 
 // ROUTER
-// ROUTER
 router.get('/', (req, res) => {
   // res.send('<h1>hi!! send data</h1>')
   res.sendFile(path.join(__dirname, '../public/main.html'))
