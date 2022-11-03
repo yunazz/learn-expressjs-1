@@ -15,6 +15,6 @@ connection.connect()
 
 // ROUTER
 router.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname,'../../public/login.html'))
+  res.sendFile(path.join(__dirname,'../../public/member.html'))
 })
 module.exports =router

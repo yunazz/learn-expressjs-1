@@ -7,9 +7,9 @@
 <body>
 <h2>AJAX 형식</h2>
 <div style="display: flex">
-  <form action='/email/form' method="post">
-    이름 : <input type="text" name="email">
-  </form>
+  <div>
+    이메일 : <input type="text"  id="email">
+  </div>
   <button class="ajaxsend" style="margin-left: 12px;">ajax send</button>
 </div>
 <p class="result"></p>
@@ -19,7 +19,7 @@
 
 <script>
   document.querySelector('.ajaxsend').addEventListener('click', () => {
-    let inputData = document.forms[0].elements[0].value;
+    let inputData = document.getElementById('email').value
     if (inputData.length === 0) {
       alert('이름을 입력해 주세요.')
       return
@@ -38,9 +38,10 @@
     xhr.addEventListener('load', () => {
       let result = JSON.parse(xhr.responseText)
       if (result.resultCode !== '0000') {
+        document.querySelector('.result').innerHTML = '가입되지 않은 회원입니다.'
         return
       }
-      document.querySelector('.result').innerHTML = `${result.email}님 환영합니다.`
+      document.querySelector('.result').innerHTML = `${result.data.name}님 환영합니다.`
     })
   }
 
