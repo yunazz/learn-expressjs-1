@@ -6,6 +6,7 @@
 </head>
 <body>
 <h1>회원가입</h1>
+<p><%=message%></p>
 <form action="/join" method="post">
   <div>
     id: <input type="text" name="id">
@@ -18,7 +19,9 @@
   </div>
   <input id='joinBtn' type="submit">
 </form>
-
+<div style="padding-top: 10px;">
+  <a href="/">메인으로 가기</a>
+</div>
 </body>
 
 </html>

@@ -1,18 +1,26 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>email ejs template</title>
+    <title>Join Success</title>
 </head>
 <body>
-
-<h1>가입을 축하합니다!! <%= name %></h1>
-
+<h1>회원가입 성공</h1>
+<h3>welcome <%= id %></h3>
 <div style="padding-top: 10px;">
     <a href="/">메인으로 가기</a>
 </div>
 </body>
+<script>
+  window.onload = () => {
+    let id = "<%= id %>";
+    if (!id) {
+      console.log('가입정보가 없습니다.')
+      location.href = '/'
+    }
+  }
+</script>
 </html>

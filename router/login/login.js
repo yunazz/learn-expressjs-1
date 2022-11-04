@@ -17,26 +17,50 @@ connection.connect()
 
 // ROUTER
 router.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname,'../../public/login.html'))
+  // res.sendFile(path.join(__dirname,'../../public/login.html'))
+    res.render('login.ejs',{id:req.user})
 })
 
-// PASSPORT 적용
-passport.use('local-join', new LocalStrategy({
+passport.serializeUser((user, done) => {
+  done(null, user.id)
+})
+passport.deserializeUser((id, done) => {
+  done(null, id)
+})
+
+passport.use('local-login', new LocalStrategy({
   usernameField: 'id',
   passwordField: 'password',
-  passReqToCallBack: true,
 }, (id, password, done) => {
-  const query = connection.query('select * from user where id =?',[id],(err, rows)=>{
-    if(err) {return done(err)}
-    if(rows.length> 0) {
-      return done(null, false, {message: '이미 존재하는 아이디입니다.'})
+  const query = connection.query('select * from user where id =?', [id], (err, rows) => {
+    if (err) {
+      return done(err)
+    }
+    if (rows.length > 0) {
+      return done(null, {id: rows[0].id})
+    } else {
+      return done(null, false, {message: '아이디 정보가 없습니다.'})
     }
   })
 }))
 
-router.post('/', passport.authenticate('local-join',
-  {successRedirect: '/main', failureRedirect: 'join', failureFlash: true}
-))
+// json 방식으로 데이터 넘기기
+router.post('/', (req, res, next) => {
+  passport.authenticate('local-login', (err, user, info) => {
+    if (err) {
+      return res.status(500).json(err)
+    }
+    if (!user) {
+      return res.status(401).json({resultCode: '9999', resultMsg: info.message})
+    }
 
+    req.logIn(user, (err) => {
+      if (err) {
+        return next(err)
+      }
+      return res.json({resultCode: '0000', ...user})
+    })
+  })(req, res, next)
+})
 
-module.exports =router
+module.exports = router

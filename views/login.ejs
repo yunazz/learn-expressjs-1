@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+<h1>로그인</h1>
+<div class="loginzone">
+    <form action="/login" method="post">
+        <div>
+            id: <input type="text" name="id">
+        </div>
+        <div>
+            password: <input type="password" name="password">
+        </div>
+    </form>
+    <button class="ajaxsend">login</button>
+  <div class="error"></div>
+</div>
+
+<div class="successzone" style="display: none">
+    <p>
+        <span class="result"></span>
+        <a href='/logout'>로그아웃</a>
+    </p>
+</div>
+<div style="padding-top: 10px;">
+    <a href="/">메인으로 가기</a>
+</div>
+<script>
+  window.onload= ()=> {
+    let id = "<%= id %>";
+    if(id){
+      document.querySelector('.result').innerHTML = `${id}님 환영합니다.`
+      document.querySelector('.successzone').style.display = 'block'
+      document.querySelector('.loginzone').style.display = 'none'
+    }
+  }
+  document.querySelector('.ajaxsend').addEventListener('click', () => {
+    const id = document.getElementsByName('id')[0].value
+    const password = document.getElementsByName('password')[0].value
+    sendAjax('http://localhost:3000/login', {id, password})
+  })
+
+  function sendAjax(url, data) {
+    let inputData = data
+    inputData = JSON.stringify(inputData)
+    const xhr = new XMLHttpRequest()
+    xhr.open('POST', url)
+    xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.send(inputData)
+
+    xhr.addEventListener('load', () => {
+      let result = JSON.parse(xhr.responseText)
+      if (result.resultCode !== '0000') {
+        document.querySelector('.error').innerHTML = result.resultMsg
+        document.querySelector('.successzone').style.display = 'none'
+        document.querySelector('.loginzone').style.display = 'block'
+      } else {
+        document.querySelector('.result').innerHTML = `${result.id}님 환영합니다.`
+        document.querySelector('.successzone').style.display = 'block'
+        document.querySelector('.loginzone').style.display = 'none'
+      }
+    })
+
+  }
+</script>
+</body>
+</html>
