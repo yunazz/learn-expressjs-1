@@ -1,3 +1,4 @@
-# learn-expressjs-1
+# learn-expressjs-login
 
-learning node.js and express.js
+- learning node.js and express.js
+- passport
